@@ -101,7 +101,7 @@ Now the issue becomes, we have successfuly detected buildings and their average 
 
 ## Improvement 2
 
-For this improvement, we looked towards the implementation of [HGDNet](https://arxiv.org/pdf/2308.05387v1). We implemented two key ideas from it - Log-normalization of DSM values along with the introduction of a hierarchal height classifier to guide the regression model.
+For this improvement, we looked towards the implementation of [HGDNet](https://arxiv.org/pdf/2308.05387v1). We implemented two key ideas from it - Log-normalization of DSM values along with the introduction of a hierarchical height classifier to guide the regression model.
 
 ### Pre-processing
 
@@ -114,6 +114,19 @@ These changes come as we noticed clustering of values for both SAR and DSM at ra
 
 ### Model Architecture
 
-Same as before with one key change: introduced a DSN outout after layer 3 of the ResNet Block. This deep supervision output was introduced to add hierarchal height detection to the model. In the training loop, we use this DSN output to classify whether the height of the building falls into one of four categories, ground (0-2.5 meters), low (2.5-10 meters), medium (10-36 meters), high (>36 meters). During inference, the regression branch is used.
+Same as before with one key change: introduced a DSN outout after layer 3 of the ResNet Block. This deep supervision output was introduced to add hierarchical height detection to the model. In the training loop, we use this DSN output to classify whether the height of the building falls into one of four categories, ground (0-2.5 meters), low (2.5-10 meters), medium (10-36 meters), high (>36 meters). During inference, the regression branch is used.
 
-## Results
+### Results
+
+## Experiments
+
+This folder just contains various notebooks we used to experiment different models, preprocessing techniques, and final activation heads.
+
+Here's a list of each notebook and the corresponding experiment
+
+- **hgdnet-copy-azaan-outputs:** Our attempt at following HGDNet's implementation, following it to the best of our capabilities. We used a pretrained ConvNext-V2 base for the encoder, and UperNet for the decoders with a PSP module at the start. We had one decoder for hierarchical height estimation and one for regression estimation. The delta metrics are a bit off due a programming error (no expm1 during inference :<), but the RMSE and MAE errors are higher than ours anyways despite taking 4 more hours to run
+- **ibrahim-building-height-log-normalized-dsn-simple:** An attempt at improvement 2 using Softplus activation function. We figured since we were using log-normalized DSM values, using softplus would be a good function instead of ReLU and Sigmoid, since it's really just a smoother ReLU. Unfortunately, it led to worse results :(
+- **Log_improvement_ibrahim:** Using log normalization on DSM values with the same model as Improvement 1. This led to an increase of 5% in delta metrics, although RMSE and MAE values were worse. Final Test RMSE: 6.3394 | MAE: 2.7256. Final Test δ Metrics — δ₁: 0.5656 | δ₂: 0.6252 | δ₃: 0.6632
+- **dl-proj-improvement1 (1):** An attempt to at the first improvement, using Sigmoid as the final activation. We used these experiments to settle between sigmoid, softplus, and ReLU, eventually settling on ReLU as the best final activation function.
+
+Many more experiments, but showing just these four for now :p
