@@ -33,9 +33,8 @@ Originally, we were using the DFC-2018 Dataset per Maam Sana's recommendation, h
 ## Baseline
 
 Our baseline model was taken from the [DFC-2023](https://github.com/AICyberTeam/DFC2023-baseline).
-Our three delivarables differ in pre-processing of data, and model architecture.
 
-### Pre=processing
+### Pre-processing
 
 For the baseline, the pre-processed data only included RGB data for the model to train on - no SAR data. The DSM values were normalized by simply dividing by 184 (maximum height in the dataset).
 
@@ -114,9 +113,20 @@ These changes come as we noticed clustering of values for both SAR and DSM at ra
 
 ### Model Architecture
 
-Same as before with one key change: introduced a DSN outout after layer 3 of the ResNet Block. This deep supervision output was introduced to add hierarchical height detection to the model. In the training loop, we use this DSN output to classify whether the height of the building falls into one of four categories, ground (0-2.5 meters), low (2.5-10 meters), medium (10-36 meters), high (>36 meters). During inference, the regression branch is used.
+We made one key change to the previous layer: Instead of just having one final head for the regression outputs, we introduced two heads: one for classification, and one for the regression model. HGDNet uses an encoder-decoder layout, with two decoders, one for classification, one for regression. The classification one guides the regression output. We have done the same here, except here we have two seperate heads instead of two seperate decoders. In the training loop, for the classifier we made four categories, ground (0-2.5 meters), low (2.5-10 meters), medium (10-36 meters), high (>36 meters) from the DSM values and used those with cross entropy loss. The regression branch still uses smoothL1loss. Essentially, we have adapted our model to follow HGDNet's implementation. During inference, the regression branch is used.
 
 ### Results
+
+Although the RMSE and MAE values saw an increase, the delta values, the metrics we preferred more, saw a massive improvement:
+
+- Final Test RMSE: 7.6207 | MAE: 3.8561
+- Final Test δ Metrics — δ₁: 0.6438 | δ₂: 0.6749 | δ₃: 0.7015.
+
+A marked improvement, that is also reflected in the final results:
+
+![Improvement 2 Outputs](Improvement_2_Outputs.png)
+
+We can see here, not only does the model now do a good job at building extraction, but it is also comes quite close to the actual building heights, which is reflected in the vastly improved delta metrics. Ofcourse, there are still improvements to be made, particularly in building extraction, and we hope to work on those more in the future. We already have a couple of ideas - trying to employ what we've learnt in DL, we can try tackling this problem using newer, state of the art models. Another idea is to use vision transformers instead of the current DeepLab based architecture, but using the same idea of having a classification model guide the regression one. To be discussed further.
 
 ## Experiments
 
