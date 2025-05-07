@@ -51,9 +51,9 @@ We trained the model for 30 epochs. The loss criteria was Mean Square Error. The
 
 ### Results
 
-The results were: Final Test RMSE: 0.0312 | MAE: 0.0182
+The results were: Final Test RMSE: 0.0312m | MAE: 0.0182m
 
-Accounting for scaling (dividing DSM values by 184), these values lead to 5.7408 for the Root Mean Square Error and 3.34 for the Mean Absolute Error.
+Accounting for scaling (dividing DSM values by 184), these values lead to 5.7408m for the Root Mean Square Error and 3.34m for the Mean Absolute Error.
 We decided on these evaluation metrics after meeting with Maam Sana, as these were the standard for building height estimation projects.
 
 The outputs were promising. On discussion with Maam Sana, it was decided to make changes to the model to improve segmentation, as it was the clear issue in our outputs.
@@ -86,7 +86,7 @@ The loss criteria now was SmoothL1loss. The optimizer was again Adam and the lea
 
 This time, we incorporated delta metrics, as those were used by the DFC-2023 winners as well. Delta metrics calculate accuracy based on how close each predicted pixel value was to its actual height. Delta 1 measures those within 25% of the original building height. Delta 2 measures within 56%. Delta 3 measures 95% (1.25, 1.25^2, 1.25^3 respectively). We also kept RMSE and MAE measures. Here are the results:
 
-Final Test RMSE: 6.0782 | MAE: 2.5996
+Final Test RMSE: 6.0782m | MAE: 2.5996m
 Final Test δ Metrics — δ₁: 0.5174 | δ₂: 0.5381 | δ₃: 0.5527
 
 Furthermore, our outputs are now as:
@@ -119,7 +119,7 @@ We made one key change to the previous layer: Instead of just having one final h
 
 Although the RMSE and MAE values saw an increase, the delta values, the metrics we preferred more, saw a massive improvement:
 
-- Final Test RMSE: 7.6207 | MAE: 3.8561
+- Final Test RMSE: 7.6207m | MAE: 3.8561m
 - Final Test δ Metrics — δ₁: 0.6438 | δ₂: 0.6749 | δ₃: 0.7015.
 
 A marked improvement, that is also reflected in the final results:
