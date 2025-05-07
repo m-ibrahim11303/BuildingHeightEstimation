@@ -119,8 +119,8 @@ We made one key change to the previous layer: Instead of just having one final h
 
 Although the RMSE and MAE values saw an increase, the delta values, the metrics we preferred more, saw a massive improvement:
 
-- Final Test RMSE: 7.6207m | MAE: 3.8561m
-- Final Test δ Metrics — δ₁: 0.6438 | δ₂: 0.6749 | δ₃: 0.7015.
+- Final Test RMSE: 6.8623 | MAE: 3.4793
+- Final Test δ Metrics — δ₁: 0.6440 | δ₂: 0.6885 | δ₃: 0.7251
 
 A marked improvement, that is also reflected in the final results:
 
